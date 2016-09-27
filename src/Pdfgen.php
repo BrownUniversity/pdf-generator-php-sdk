@@ -54,12 +54,14 @@ class Pdfgen {
         curl_setopt_array($ch, $options);
 
         $result = curl_exec($ch);
-        $info = curl_getinfo($ch);
         $error = curl_errno($ch);
-        $errmsg = curl_error($ch);
-        $this->logger->debug('CURL INFO', $info);
-        $this->logger->debug($errmsg);
-        $this->logger->debug('Result', ['contents' => $result]);
+        if ($error != 0) {
+            $info = curl_getinfo($ch);
+            $msg = curl_error($ch);
+            $this->logger->debug('Error:', array('Number' => $error, 'Message' => $msg));
+            $this->logger->debug('CURL INFO:', $info);
+        }
+
         $filename = '/tmp/' . uniqid('princexml') . '.pdf';
         $fp = fopen($filename, 'w+');
         fwrite($fp, $result);
