@@ -20,15 +20,16 @@ class Pdfgen {
     /**
      * Pdfgen constructor.
      *
+     * @param array $config
      * @param $logger
      * @throws Exception
      */
-    public function __construct($logger)
+    public function __construct(array $config, $logger)
     {
         $this->logger = $logger;
-        $this->username = '***REMOVED***';
-        $this->password = '***REMOVED***';
-        $this->base_url = 'https://local.cis-dev.brown.edu:8443/pdf/';
+        $this->username = $config['username'];
+        $this->password = $config['password'];
+        $this->base_url = $config['base_url'];
     }
 
     public function convert($html, $css = array(), $js = array())
