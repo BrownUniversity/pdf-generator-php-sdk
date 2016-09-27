@@ -20,15 +20,16 @@ class Pdfgen {
     /**
      * Pdfgen constructor.
      *
+     * @param array $config
      * @param $logger
      * @throws Exception
      */
-    public function __construct($logger)
+    public function __construct(array $config, $logger)
     {
         $this->logger = $logger;
-        $this->username = '***REMOVED***';
-        $this->password = '***REMOVED***';
-        $this->base_url = 'https://local.cis-dev.brown.edu:8443/pdf/';
+        $this->username = $config['username'];
+        $this->password = $config['password'];
+        $this->base_url = $config['base_url'];
     }
 
     public function convert($html, $css = array(), $js = array())
@@ -53,14 +54,17 @@ class Pdfgen {
         curl_setopt_array($ch, $options);
 
         $result = curl_exec($ch);
-        $info = curl_getinfo($ch);
         $error = curl_errno($ch);
-        $errmsg = curl_error($ch);
-        $this->logger->debug('CURL INFO', $info);
-        $this->logger->debug($errmsg);
-        $this->logger->debug('Result', ['contents' => $result]);
-        $fp = fopen('/tmp/output.pdf', 'w+');
+        if ($error != 0) {
+            $info = curl_getinfo($ch);
+            $msg = curl_error($ch);
+            $this->logger->debug('Error:', array('Number' => $error, 'Message' => $msg));
+            $this->logger->debug('CURL INFO:', $info);
+        }
+
+        $filename = '/tmp/' . uniqid('princexml') . '.pdf';
+        $fp = fopen($filename, 'w+');
         fwrite($fp, $result);
-        return '/tmp/output.pdf';
+        return $filename;
     }
 }
