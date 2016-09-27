@@ -60,8 +60,9 @@ class Pdfgen {
         $this->logger->debug('CURL INFO', $info);
         $this->logger->debug($errmsg);
         $this->logger->debug('Result', ['contents' => $result]);
-        $fp = fopen('/tmp/output.pdf', 'w+');
+        $filename = '/tmp/' . uniqid('princexml') . '.pdf';
+        $fp = fopen($filename, 'w+');
         fwrite($fp, $result);
-        return '/tmp/output.pdf';
+        return $filename;
     }
 }
