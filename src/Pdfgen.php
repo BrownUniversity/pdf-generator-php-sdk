@@ -27,9 +27,15 @@ class Pdfgen {
     public function __construct(array $config, $logger)
     {
         $this->logger = $logger;
-        $this->username = $config['username'];
-        $this->password = $config['password'];
-        $this->base_url = $config['base_url'];
+        if (count($config) == 0) {
+            $this->username = getenv('PDF_USERNAME');
+            $this->password = getenv('PDF_PASSWORD');
+            $this->base_url = getenv('PDF_BASE_URL');
+        } else {
+            $this->username = $config['username'];
+            $this->password = $config['password'];
+            $this->base_url = $config['base_url'];
+        }
     }
 
     public function convert($html, $css = array(), $js = array())
