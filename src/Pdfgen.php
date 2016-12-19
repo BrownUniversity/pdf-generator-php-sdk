@@ -31,10 +31,12 @@ class Pdfgen {
             $this->username = getenv('PDF_USERNAME');
             $this->password = getenv('PDF_PASSWORD');
             $this->base_url = getenv('PDF_BASE_URL');
+            $this->tmp_path = getenv('PDF_TMP_PATH');
         } else {
             $this->username = $config['username'];
             $this->password = $config['password'];
             $this->base_url = $config['base_url'];
+            $this->tmp_path = $config['tmp_path'];
         }
     }
 
@@ -44,7 +46,7 @@ class Pdfgen {
 
         $ch = curl_init();
 
-        $options = [];
+        $options = array();
         $options[CURLOPT_URL] = $url;
         $options[CURLOPT_USERPWD] = "{$this->username}:{$this->password}";
         $options[CURLOPT_SSL_VERIFYPEER] = false;
@@ -68,7 +70,7 @@ class Pdfgen {
             $this->logger->debug('CURL INFO:', $info);
         }
 
-        $filename = '/tmp/' . uniqid('princexml') . '.pdf';
+        $filename = $this->tmp_path . uniqid('princexml') . '.pdf';
         $fp = fopen($filename, 'w+');
         fwrite($fp, $result);
         return $filename;
