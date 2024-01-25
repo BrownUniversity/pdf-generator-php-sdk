@@ -16,6 +16,11 @@ class Pdfgen {
      * @var PSR-3 Logger
      */
     private $logger;
+    
+    private $username;
+    private $password;
+    private $base_url;
+    private $tmp_path;
 
     /**
      * Pdfgen constructor.
