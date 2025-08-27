@@ -45,7 +45,7 @@ class Pdfgen {
         }
     }
 
-    public function convert($html, $css = array(), $js = array())
+    public function convert($html, $css = array(), $js = array(), $pdf_opts = array())
     {
         $url = $this->base_url . 'convert';
 
@@ -61,7 +61,8 @@ class Pdfgen {
         $options[CURLOPT_POSTFIELDS] = array(
             'html' => $html,
             'css' => implode("|", $css),
-            'js' => implode("|", $js)
+            'js' => implode("|", $js),
+            'options' => json_encode($pdf_opts)
         );
 
         curl_setopt_array($ch, $options);
